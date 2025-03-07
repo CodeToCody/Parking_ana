@@ -1,0 +1,8 @@
+# ignore file
+clean_data/
+Report_sheet/
+source/
+
+# ignore data
+112_confirm.xls
+113_confirm.xls
