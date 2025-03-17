@@ -31,16 +31,16 @@ ticket_type_mapping = {
 
 # **載入車號對應票種**
 def load_ticket_mapping(ticket_path):
-    """ 載入 112_confirm.xls 建立車號 -> 票種的正確對應字典"""
+    """ 載入車號 -> 票種的正確對應表"""
     ticket_mapping = {}
     try:
         excel_data = pd.ExcelFile(ticket_path,engine="xlrd")
 
         for sheet_name in excel_data.sheet_names:
-            df = pd.read_excel(ticket_path, sheet_name=sheet_name, header=2, dtype=str)    # 讀取第3列後的資料
+            df = pd.read_excel(ticket_path, sheet_name=sheet_name, header=2, dtype=str)     # 讀取第3列後的資料
             if "車號" in df.columns:
-                df["車號"] = df["車號"].str.replace("-", "", regex=True).str.strip()        # 去除 `-`
-                mapped_ticket_type = ticket_type_mapping.get(sheet_name, sheet_name)  # 如果沒有對應，保持原票種名
+                df["車號"] = df["車號"].str.replace("-", "", regex=True).str.strip()         # 去除 `-`
+                mapped_ticket_type = ticket_type_mapping.get(sheet_name, sheet_name)        # 如果沒有對應，保持原票種名
                 df["票種"] = mapped_ticket_type
                 ticket_mapping.update(df.set_index("車號")["票種"].to_dict())
 
@@ -52,7 +52,7 @@ def load_ticket_mapping(ticket_path):
     return ticket_mapping
 
 # **處理票種校正**
-def correct_ticket_type(row, ticket_mapping):
+def correct_ticket_type(row, mapping1,mapping2):
     """ 校正 8/1 之前的對應票種 """
     car_number = row["車號"].strip().upper() # 標準化
 
@@ -63,13 +63,21 @@ def correct_ticket_type(row, ticket_mapping):
         return row # 日期有誤(格式錯誤)，跳過修正
     
     # 校正 8/1 前的紀錄
-    cutoff_data = datetime(entry_date.year, 8, 1)
+    cutoff_date = datetime(entry_date.year, 8, 1)  # 設定 8/1 作為分界點
 
-    if entry_date < cutoff_data and car_number in ticket_mapping:
-        expected_ticket = ticket_mapping[car_number]
+    # **8/1 之前 → 用 `mapping1` 校正**
+    if entry_date < cutoff_date and car_number in mapping1:
+        expected_ticket = mapping1[car_number]
         if row["票種"] != expected_ticket:
-            print(f"修正車號 {car_number}: 票種從 {row['票種']} -> {expected_ticket}")
-            row["票種"] = expected_ticket # 修正票種
+            print(f"🚗 修正車號 {car_number} (8/1 前): 票種從 {row['票種']} → {expected_ticket}")
+            row["票種"] = expected_ticket
+
+    # **8/1 之後 → 用 `mapping2` 校正**
+    elif entry_date >= cutoff_date and car_number in mapping2:
+        expected_ticket = mapping2[car_number]
+        if row["票種"] != expected_ticket:
+            print(f"🚗 修正車號 {car_number} (8/1 後): 票種從 {row['票種']} → {expected_ticket}")
+            row["票種"] = expected_ticket
 
     return row
 
@@ -92,7 +100,7 @@ def input_stream(path):
 
 
 # **格式化紀錄時間函式**
-def format_record_time(df):
+def format_record_time(df,path1,path2):
     if df is None:
         return
     
@@ -156,7 +164,7 @@ def format_record_time(df):
 
     # 校正 8/1 前的車號票種
     if "車號" in reorder_data.columns and "票種" in reorder_data.columns:
-        reorder_data = reorder_data.apply(lambda row: correct_ticket_type(row,ticket_mapping), axis=1)
+        reorder_data = reorder_data.apply(lambda row: correct_ticket_type(row,path1,path2), axis=1)
     
 
     # **輸出 CSV**
@@ -169,6 +177,9 @@ def format_record_time(df):
 
 
 # 執行流程
-ticket_mapping = load_ticket_mapping(ticket_file_path)
+first_hlaf_mapping = load_ticket_mapping(r"D:\Research\112_confirm.xls")
+second_half_mapping = load_ticket_mapping(r"D:\Research\113_confirm.xls")
+
 data = input_stream(input_file_path)
-format_record_time(data)
+
+format_record_time(data,first_hlaf_mapping,second_half_mapping)
