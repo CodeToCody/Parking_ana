@@ -1,19 +1,14 @@
 from datetime import datetime, timedelta
 import pandas as pd
 from tqdm import tqdm
+import os 
 
-# 設定電腦路徑
-computer_num = 1  # 1 for notebook, 0 for laptop
 
-if computer_num == 1:
-    data1 = pd.read_csv(r"C:/Cody/Research/Report_sheet/工作日統計_8月前.csv")
-    data2 = pd.read_csv(r"C:/Cody/Research/Report_sheet/工作日統計_8月後.csv")
-else:
-    data1 = pd.read_csv(r"D:/Research/Report_sheet/工作日統計_8月前.csv")
-    data2 = pd.read_csv(r"D:/Research/Report_sheet/工作日統計_8月後.csv")
+data_file = os.getcwd()
+file_path = os.path.join(data_file,"clean_data\prepare.csv")
+data = pd.read_csv(file_path)
+output_file_path = os.path.join(data_file,"temp_file\sample.csv")
 
-# 合併數據
-data = pd.concat([data1, data2], ignore_index=True)
 
 # 確保時間格式正確
 data['全時間格式進入時間'] = pd.to_datetime(data['全時間格式進入時間'], errors='coerce')
@@ -62,7 +57,6 @@ hourly_df.reset_index(inplace=True)
 # 檢查結果
 print("每小時停車數量樣本:")
 print(hourly_df.head())
-if computer_num == 1:
-    hourly_df.to_csv("C:/Cody/Research/temp_file/每小時停車數量樣本.csv")
-else:
-    hourly_df.to_csv("D:/Research/temp_file/每小時停車數量樣本.csv")
+
+
+hourly_df.to_csv(output_file_path,index=False)

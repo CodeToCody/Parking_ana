@@ -6,12 +6,13 @@ from datetime import datetime
 # 設定格式
 datetime_format = "%Y/%m/%d"
 
+directory_path = os.getcwd()
+
 # 輸入設定
-input_file_path = r"D:\Research\source"
-ticket_file_path = r"D:\Research\112_confirm.xls"
+input_file_path = os.path.join(directory_path,"source")
 
 # 輸出設定
-output_file = r"D:\Research\clean_data\prepare.csv"
+output_file = os.path.join(directory_path,"clean_data/prepare.csv")
 
 # 自訂欄位順序（移除「索引」欄位）
 column_names = ["車號", "票種", "子場站", "進出及付費狀態", "校正狀態", 
@@ -176,9 +177,13 @@ def format_record_time(df,path1,path2):
 
 
 
+ticket_verify1_path = os.path.join(directory_path,"112_confirm.xls")
+ticket_verify2_path = os.path.join(directory_path,"113_confirm.xls")
+
+
 # 執行流程
-first_hlaf_mapping = load_ticket_mapping(r"D:\Research\112_confirm.xls")
-second_half_mapping = load_ticket_mapping(r"D:\Research\113_confirm.xls")
+first_hlaf_mapping = load_ticket_mapping(ticket_verify1_path)
+second_half_mapping = load_ticket_mapping(ticket_verify2_path)
 
 data = input_stream(input_file_path)
 
