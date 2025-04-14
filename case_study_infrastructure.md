@@ -23,7 +23,7 @@
 
 - **變數**：
   - 獨立變數：`車號`、`票種`
-  - 依賴變數：進出時間`、`停車頻率`
+  - 依賴變數：`進出時間` 、 `停車頻率`
 
 ---
 
@@ -37,8 +37,6 @@
 ### 3️⃣ <span style="background-color: #cce5ff; padding: 2px; color: #2c3e50;"> 停車位不足 ?</span>
 ---
 
-### 4. 架構中每一部分彼此是什麼關係？
----
 # 碩論規劃
 
 ## Chapter1 緒論
@@ -53,8 +51,12 @@
 
 - Case study 是什麼？選擇個案研究
   - What is a case study?    - Roberta Heale, Alison Twycross
+- 數據如何處理?
+  - A Review on Data Cleansing Methods for Big Data  - F. Ridzuan and W. M. N. W. Zainon
 - 停車供需分析的相關理論(以車辨系統之資料做挖掘)
+  - The effectiveness of parking policies to reduce parking demand pressure and car use -S. Norhisham and N. Ismail
 - 國內外大學停車管理研究與改善實例
+  - Dealing with parking issues on an urban campus: The case of UC Berkeley -W. Riggs
 
 ## Chapter3 研究方法
 
