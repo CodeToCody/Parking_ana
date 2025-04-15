@@ -28,7 +28,7 @@
 ---
 
 
-### 3. 你的分析結果要支持什麼樣的結論？
+### 3. 停車管理需求是什麼
 
 ### 1️⃣ <span style="background-color: #2c3e50; padding: 2px; color: white;"> 是否為過夜停車戶造成的 ?</span>
 
@@ -41,6 +41,21 @@
 
 ## Chapter1 緒論
 
+```
+文件
+需求訪談，
+寫不出文件就沒有用
+
+學校的大巴士
+需求是什麼?
+車證的規則架構規則架構
+
+問管理者的需求
+
+需求 -> 分析 -> 呈現
+
+把規則寫出來
+```
 - 研究背景（校園停車問題日益嚴重）
 - 研究動機（教職員抱怨找不到位子，是否票種設計出問題？） 
 - 研究目的與問題（有哪些因素造成平日停車不足？如何改善？）
@@ -51,6 +66,16 @@
 
 - Case study 是什麼？選擇個案研究
   - What is a case study?    - Roberta Heale, Alison Twycross
+```
+需求管理系統
+user需求是什麼(flow chart)
+
+
+早期沒有車辨系統，有數據後就要開始思索如何管理，長期以來都是駐警隊在管，但缺乏完整評估過
+```
+
+
+
 - 數據如何處理?
   - A Review on Data Cleansing Methods for Big Data  - F. Ridzuan and W. M. N. W. Zainon
 - 停車供需分析的相關理論(以車辨系統之資料做挖掘)
