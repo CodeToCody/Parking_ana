@@ -81,6 +81,8 @@ for _,row in tqdm(source_data.iterrows(), total=len(source_data),desc="處理停
 
     start_floor = start_time.floor('h')
     end_floor = end_time.floor('h')
+    if end_floor - start_floor < pd.Timedelta(hours=1):
+        continue
     duration_hours = pd.date_range(start=start_floor, end=end_floor - pd.Timedelta(hours=1), freq='h')
 
     # 記錄停留欄位 +1
