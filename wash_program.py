@@ -141,10 +141,10 @@ def format_record_time(df,path1,path2):
     reorder_data["進入日"] = pd.to_datetime(reorder_data["進入日"], errors="coerce").dt.strftime("%Y/%m/%d")
     reorder_data["出場日"] = pd.to_datetime(reorder_data["出場日"], errors="coerce").dt.strftime("%Y/%m/%d")
 
-    reorder_data["進入日"] = reorder_data["進入日"].astype(str).str.strip()
-    reorder_data["出場日"] = reorder_data["出場日"].astype(str).str.strip()
-    reorder_data["進入時間"] = reorder_data["進入時間"].astype(str).str.strip()
-    reorder_data["出場時間"] = reorder_data["出場時間"].astype(str).str.strip()
+    # reorder_data["進入日"] = reorder_data["進入日"].astype(str).str.strip()
+    # reorder_data["出場日"] = reorder_data["出場日"].astype(str).str.strip()
+    # reorder_data["進入時間"] = reorder_data["進入時間"].astype(str).str.strip()
+    # reorder_data["出場時間"] = reorder_data["出場時間"].astype(str).str.strip()
 
     # 避免 NaN 影響，將 "nan" 轉為 NaN
     reorder_data.replace("nan", np.nan, inplace=True)

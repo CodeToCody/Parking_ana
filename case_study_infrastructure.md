@@ -30,6 +30,8 @@
 
 ### 3. 停車管理需求是什麼
 
+把以往的分析方式寫成流程
+
 ### 1️⃣ <span style="background-color: #2c3e50; padding: 2px; color: white;"> 是否為過夜停車戶造成的 ?</span>
 
 ### 2️⃣ <span style="background-color: #ffff99; padding: 2px; color: #333333;"> 是否有可能為票種濫用/分發數量過多 ?</span>
