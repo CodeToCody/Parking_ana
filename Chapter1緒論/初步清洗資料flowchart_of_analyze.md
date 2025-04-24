@@ -1,6 +1,6 @@
 ```mermaid
 flowchart TD
-        A[➡開始] --> B[📁 載入資料]
+        A@{ shape: circle, label: "開始" } --> B[📁 載入資料]
         B --> C[📄 載入票種對應表]
         C --> D[📥 載入進出資料]
         D --> E[🔄 清洗資料]
