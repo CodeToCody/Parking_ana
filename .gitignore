@@ -9,3 +9,6 @@ source/
 113_confirm.xls
 cody.docx
 實驗區/check.csv
+
+#ignore image
+*.png
