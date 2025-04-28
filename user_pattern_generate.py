@@ -9,18 +9,7 @@ here = os.getcwd()
 source_data_location = os.path.join(here,r"Report_sheet/工作日統計_8月前.csv")
 
 
-# make a table with time index (column direction)
-# time_index = pd.date_range(start="2024-08-01 00:00:00",end="2024-12-31 23:00:00",freq="h")
-time_index = pd.date_range(start="2024-01-01 00:00:00",end="2024-07-31 23:00:00",freq="h")
 
-# define the weekday's name (row definition)
-weekday_names = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
-columns = []
-
-
-for weekday in weekday_names:
-    for suffix in ['進','出','停留']:
-        columns.append(f'{weekday}_{suffix}')
 
 
 
@@ -34,6 +23,22 @@ print(source_data.head())
 print("缺失值檢查:")
 print("進入時間缺失:", source_data["全時間格式進入時間"].isna().sum())
 print("出場時間缺失:", source_data["全時間格式出場時間"].isna().sum())
+
+
+
+
+# make a table with time index (column direction)
+# time_index = pd.date_range(start="2024-08-01 00:00:00",end="2024-12-31 23:00:00",freq="h")
+time_index = pd.date_range(start="2024-01-01 00:00:00",end="2024-07-31 23:00:00",freq="h")
+
+# define the weekday's name (row definition)
+weekday_names = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+columns = []
+
+
+for weekday in weekday_names:
+    for suffix in ['進','出','停留']:
+        columns.append(f'{weekday}_{suffix}')
 
 # create the table 
 record_table = pd.DataFrame(0,index=time_index,columns=columns)

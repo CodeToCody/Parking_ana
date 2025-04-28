@@ -100,8 +100,8 @@ def input_stream(path):
 
 
 
-# **格式化紀錄時間函式**
-def format_record_time(df,path1,path2):
+# **格式化紀錄時間函式** 
+def format_datas(df,path1,path2):
     if df is None:
         return
     
@@ -187,4 +187,4 @@ second_half_mapping = load_ticket_mapping(ticket_verify2_path)
 
 data = input_stream(input_file_path)
 
-format_record_time(data,first_hlaf_mapping,second_half_mapping)
+format_datas(data,first_hlaf_mapping,second_half_mapping)
