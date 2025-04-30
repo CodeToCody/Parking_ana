@@ -2,20 +2,21 @@
 import pandas as pd
 import plotly.graph_objs as go
 # 讀取資料
-df = pd.read_csv("prepare.csv")
+df = pd.read_csv("clean_data/prepare.csv")
 df["全時間格式進入時間"] = pd.to_datetime(df["全時間格式進入時間"], errors="coerce")
 df["全時間格式出場時間"] = pd.to_datetime(df["全時間格式出場時間"], errors="coerce")
 # 過濾不合法紀錄與超過 72 or 240 小時停留
+# temp : 改成5天 通靈
 df = df.dropna(subset=["全時間格式進入時間", "全時間格式出場時間"])
 df = df[df["全時間格式出場時間"] > df["全時間格式進入時間"]]
 #df = df[(df["全時間格式出場時間"] - df["全時間格式進入時間"]) < pd.Timedelta(hours=72)]
-df = df[(df["全時間格式出場時間"] - df["全時間格式進入時間"]) < pd.Timedelta(hours=240)]
+df = df[(df["全時間格式出場時間"] - df["全時間格式進入時間"]) < pd.Timedelta(hours=120)]
 
 # 轉換為整點時間
 df["entry_hour"] = df["全時間格式進入時間"].dt.floor("h")
 df["exit_hour"] = df["全時間格式出場時間"].dt.floor("h")
 # 建立完整時間軸與初始值為 0
-time_range = pd.date_range(df["entry_hour"].min(), df["exit_hour"].max(), freq="H")
+time_range = pd.date_range(df["entry_hour"].min(), df["exit_hour"].max(), freq="h")
 count_series = pd.Series(0, index=time_range)
 # 差分累加法計算在場車輛數
 for _, row in df.iterrows():

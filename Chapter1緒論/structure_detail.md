@@ -1,5 +1,5 @@
 ```mermaid
-flowchart TD
+flowchart LR
 
 
 A[資料收集]
@@ -39,7 +39,7 @@ F_2[尖峰時段控管]
 F_3[異常用戶提醒或取締]
 F_1 --> F
 F_2 --> F
-F_1 --> F
+F_3 --> F
 
 
 A --> B --> C --> D --> E --> F

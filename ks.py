@@ -24,3 +24,5 @@ print("🚗 停留超過 30 天的車輛數量：", len(df_over_30_days))
 print(df_over_30_days[["車號", "票種", "全時間格式進入時間", "全時間格式出場時間", "停留天數"]])
 
 df_over_30_days.to_csv("hihi.csv")
+
+df_over_30_days.to_excel("hihi.xlsx",sheet_name="總體停留數據")

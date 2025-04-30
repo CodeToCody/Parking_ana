@@ -2,6 +2,7 @@
 clean_data/
 Report_sheet/
 source/
+ana_charts/
 
 
 # ignore data
@@ -12,3 +13,7 @@ cody.docx
 
 #ignore image
 *.png
+
+
+#ipynb
+.ipynb_checkpoints/
