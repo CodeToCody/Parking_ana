@@ -5,7 +5,7 @@ from tqdm import tqdm
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 
-magic_num = 0
+magic_num = 1
 # 0 for notebook
 # 1 for desktop
 
@@ -49,7 +49,7 @@ for time_point in tqdm(sorted(time_changes.keys()), desc="累加計算在場車�
 timeline_df = pd.DataFrame(timeline, columns=["timestamp", "cars_in_parking"])
 
 
-plt.rcParams['font.family'] = 'MingLiU'
+plt.rcParams['font.family'] = 'Microsoft JhengHei'
 
 # 視覺化 折線圖
 plt.figure(figsize=(16, 5))

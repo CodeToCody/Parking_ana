@@ -6,7 +6,7 @@ from datetime import datetime
 # 設定格式
 datetime_format = "%Y/%m/%d"
 
-magic_num = 0
+magic_num = 1
 # 0 for notebook
 # 1 for desktop
 
