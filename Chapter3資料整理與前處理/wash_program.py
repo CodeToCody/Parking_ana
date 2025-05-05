@@ -6,13 +6,23 @@ from datetime import datetime
 # 設定格式
 datetime_format = "%Y/%m/%d"
 
+magic_num = 0
+# 0 for notebook
+# 1 for desktop
+
+
 directory_path = os.getcwd()
 
-# 輸入設定
-input_file_path = os.path.join(directory_path,"source")
+if magic_num == 0:
+    input_file_path = r"C:/Cody/Research/source"
+    output_file = r"C:/Cody/Research/clean_data/prepare.csv"
+elif magic_num == 1:
+    input_file_path = r"D:/Research/source"
+    output_file = r"D:/Research/clean_data/prepare.csv"
+else:
+    print("wrong magic num.")
+    exit(1)
 
-# 輸出設定
-output_file = os.path.join(directory_path,"clean_data/prepare.csv")
 
 # 自訂欄位順序（移除「索引」欄位）
 column_names = ["車號", "票種", "子場站", "進出及付費狀態", "校正狀態", 
@@ -136,6 +146,7 @@ def format_datas(df,path1,path2):
         (reorder_data["車號"].str.len().between(4, 7))  # 保留長度 4~7 碼
     ]
 
+    
 
     # 轉換進入日與出場日為 datetime，然後格式化為 "%Y/%m/%d"
     reorder_data["進入日"] = pd.to_datetime(reorder_data["進入日"], errors="coerce").dt.strftime("%Y/%m/%d")
@@ -159,7 +170,13 @@ def format_datas(df,path1,path2):
         format="%Y/%m/%d %H:%M:%S", errors="coerce"
     )
 
-    
+    '''
+     --** 將停留超過10天的用戶都先刪除 **--
+     --** 時間空白者也刪除 **--
+    '''
+    reorder_data.dropna(subset=["全時間格式進入時間", "全時間格式出場時間"])
+    reorder_data = reorder_data[reorder_data["全時間格式出場時間"] > reorder_data["全時間格式進入時間"]].copy()
+    reorder_data = reorder_data[(reorder_data["全時間格式出場時間"] - reorder_data["全時間格式進入時間"]) < pd.Timedelta(hours=120)].copy()
 
     reorder_data["停留時數"] = ((reorder_data["全時間格式出場時間"] - reorder_data["全時間格式進入時間"]).dt.total_seconds()/3600).round(2)
 
