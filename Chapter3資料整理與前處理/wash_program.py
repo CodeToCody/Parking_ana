@@ -173,6 +173,9 @@ def format_datas(df,path1,path2):
     '''
      --** 將停留超過10天的用戶都先刪除 **--
      --** 時間空白者也刪除 **--
+
+
+      ## 這段邏輯之後想改成，"同一時間時分秒出場的超過4(?)個就判定為統一校正，刪除該資料"
     '''
     reorder_data.dropna(subset=["全時間格式進入時間", "全時間格式出場時間"])
     reorder_data = reorder_data[reorder_data["全時間格式出場時間"] > reorder_data["全時間格式進入時間"]].copy()
