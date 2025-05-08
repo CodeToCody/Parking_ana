@@ -6,7 +6,6 @@ end
 
 subgraph 分析項目
 q[過夜情況統計] --> B
-w[一天停留時間分布] --> B
 e[每周進出情況] --> B
 r[票種比較] --> B
 end
@@ -190,27 +189,8 @@ explode 後變成
 # code - 3
 
 ```python
-# 新增欄位：進出時間的星期幾（0=週一, ..., 6=週日）
-data["進場星期"] = data["全時間格式進入時間"].dt.dayofweek
-data["出場星期"] = data["全時間格式出場時間"].dt.dayofweek
-# 各星期幾的進出次數統計
-entry_by_weekday = data["進場星期"].value_counts().sort_index()
-exit_by_weekday = data["出場星期"].value_counts().sort_index()
 
-# 對應中文星期名
-weekday_labels = ["週一", "週二", "週三", "週四", "週五", "週六", "週日"]
 
-plt.figure(figsize=(10, 5))
-plt.plot(weekday_labels, entry_by_weekday.values, label="進場", marker='o')
-plt.plot(weekday_labels, exit_by_weekday.values, label="出場", marker='s')
-plt.title("每週進出場次分析")
-plt.xlabel("星期")
-plt.ylabel("車輛數")
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.tight_layout()
-plt.savefig(output_graph_file + "每週進出場次.png", dpi=300)
-plt.close()
 ```
 
 # code - 4

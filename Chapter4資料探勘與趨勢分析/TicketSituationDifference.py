@@ -95,46 +95,47 @@ plt.grid(True, axis='x', alpha=0.3)
 plt.tight_layout()
 plt.savefig(output_graph_file + "票種過夜占比.png")
 
-'''
-    3. 一天停留時間分布
-'''
-
-df = data.copy()
-df["start_floor"] = df["全時間格式進入時間"].dt.floor("30min")
-df["leave_floor"] = (df["全時間格式出場時間"] + pd.Timedelta(minutes=29)).dt.floor("30min") # 未滿 30 就進位
-
-# 建立每筆資料的所有停留時間格
-def generate_time_blocks(row):
-    return pd.date_range(start=row["start_floor"], end=row["leave_floor"] - pd.Timedelta(minutes=1), freq="30min")
-
-tqdm.pandas(desc="建立所有停留時間格（支援跨日）")
-df["time_blocks"] = df.progress_apply(generate_time_blocks, axis=1)
-
-# 展開為每半小時一筆資料
-exploded = df.explode("time_blocks")
-exploded["時間標籤"] = exploded["time_blocks"].dt.strftime("%H:%M")
-
-
-# 統計每個票種在每個時間格的總數
-pivot_table = exploded.groupby(["時間標籤", "票種"]).size().unstack(fill_value=0)
-
-# 確保順序一致
-bin_labels = [t.strftime("%H:%M") for t in pd.date_range("00:00", "23:30", freq="30min")]
-pivot_table = pivot_table.reindex(bin_labels)
-
-# 除以天數，取得每日平均
-avg_table = pivot_table / len(data["出場日期"].unique())
-
-# 匯出
-avg_table.to_excel(output_graph_file + "每日平均停留_含跨日_半小時統計.xlsx")
 
 '''
-    4. 每周進出情況
+    3. 每周進出情況
 '''
+weekday_labels = ["一", "二", "三", "四", "五", "六", "日"]
+
+for ticket in tag:
+    temp_df = data[data["票種"] == ticket]
+
+    # 統計這個票種的進出星期分佈
+    entry_week = temp_df["全時間格式進入時間"].dt.weekday.value_counts().sort_index()
+    exit_week = temp_df["全時間格式出場時間"].dt.weekday.value_counts().sort_index()
+    
+    # 補齊沒出現的星期，保證 0~6 都有
+    entry_week = entry_week.reindex(range(7), fill_value=0)
+    exit_week = exit_week.reindex(range(7), fill_value=0)
+
+    # 畫圖
+    plt.figure(figsize=(10, 6))
+    bar_width = 0.35
+    x = np.arange(7)
+
+    plt.bar(x - bar_width/2, entry_week.values, bar_width, label="進場車次", color="skyblue", edgecolor="black")
+    plt.bar(x + bar_width/2, exit_week.values, bar_width, label="出場車次", color="salmon", edgecolor="black")
+
+    plt.xticks(x, [f"星期{d}" for d in weekday_labels])
+    plt.ylabel("筆數")
+    plt.title(f"{ticket} 每週進出車次分佈")
+    plt.legend()
+    plt.grid(True, axis="y", alpha=0.3)
+    plt.tight_layout()
+
+    # 儲存圖
+    save_path = os.path.join(output_graph_file, f"{ticket}_每週進出車次.png")
+    plt.savefig(save_path, dpi=300)
+    plt.close()
+    print(f"已儲存圖表：{save_path}")
 
 
 '''
-    5. 票種之間比較
+    4. 票種之間比較
 '''
 # 加入停留時間欄位
 data["停留時數"] = (data["全時間格式出場時間"] - data["全時間格式進入時間"]).dt.total_seconds() / 3600
