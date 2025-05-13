@@ -8,7 +8,7 @@ import seaborn as sns
 import numpy as np
 
 # 設定環境
-magic_num = 1
+magic_num = 0
 if magic_num == 0:
     source_path = r"C:/Cody/Research/clean_data/prepare.csv"
     output_graph_file = r"C:/Cody/Research/Chapter4資料探勘與趨勢分析/StayTimeSummary_chart/"

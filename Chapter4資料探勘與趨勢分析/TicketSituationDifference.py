@@ -8,7 +8,7 @@ from datetime import time
 from tqdm import tqdm
 
 # 設定環境
-magic_num = 1
+magic_num = 0
 # laptop = 0
 # desktop = 1
 if magic_num == 0:
@@ -20,7 +20,6 @@ elif magic_num == 1:
 else:
     print("wrong magic num.")
     exit(1)
-
 
 data = pd.read_csv(source_path)
 data["全時間格式進入時間"] = pd.to_datetime(data["全時間格式進入時間"], errors="coerce")
@@ -36,14 +35,10 @@ data["出場時間"] = data["全時間格式出場時間"].dt.time
 data["進場時間"] = data["全時間格式進入時間"].dt.time
 data["是否工作日"] = data["全時間格式進入時間"].dt.weekday < 5
 
-
-
 # 1. 分票種
 tag = data["票種"].unique()
 print(tag)
 ticket_directory = {}
-
-
 
 '''
     2. 過夜情況統計
@@ -95,7 +90,6 @@ plt.grid(True, axis='x', alpha=0.3)
 plt.tight_layout()
 plt.savefig(output_graph_file + "票種過夜占比.png")
 
-
 '''
     3. 每周進出情況
 '''
@@ -133,7 +127,6 @@ for ticket in tag:
     plt.close()
     print(f"已儲存圖表：{save_path}")
 
-
 '''
     4. 票種之間比較
 '''
@@ -152,7 +145,6 @@ plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
 plt.savefig(output_graph_file + "各票種平均停留時數.png", dpi=300)
 plt.close()
-
 
 '''
     比較
