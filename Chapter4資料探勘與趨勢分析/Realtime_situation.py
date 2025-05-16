@@ -5,7 +5,7 @@ from tqdm import tqdm
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 
-magic_num = 1
+magic_num = 0
 # 0 for notebook
 # 1 for desktop
 
