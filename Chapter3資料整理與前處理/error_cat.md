@@ -50,12 +50,6 @@ A1 --> B1
 A1 --> B2
 
 ```
-
-
-
-
-
-
 ## 窮舉可能之原因
 
 1. 欄位空值
@@ -104,6 +98,68 @@ A1 --> B2
 | 9    | 教職員計次         | 5    |
 | 10   | 退休及校友汽車識別證 | 4    |
 | 11   | 身障優惠           | 1    |
+
+```mermaid
+graph TD
+    subgraph 原始資料處理
+        start([開始]) --> A_Input[/有資料之列/];
+        A_Input --> A_Check{車號欄位有資料?};
+    end
+
+    subgraph 車號完整性檢查與分類
+        A_Check -- 是 --> A1[車號欄位有資料];
+        A_Check -- 否 --> A2[車號欄位沒資料];
+
+        A1 --> B_Check{車號是否可辨識?};
+        B_Check -- 是 --> B1[可辨識之車號];
+        B_Check -- 否 --> B2_Invalid[不可辨識之車號];
+
+        B2_Invalid --> C_Err_Type{車號異常類型?};
+        C_Err_Type -- 異常符號 --> C1[標記：異常符號];
+        C_Err_Type -- 號碼數量錯誤 --> C2[標記：號碼數量錯誤];
+        C_Err_Type -- 兩者皆有 --> C3[標記：數量錯誤且包含異常符號];
+    end
+
+    subgraph 時間資料問題檢查
+        B1 --> Time_Check{時間資料完整性與邏輯?};
+        Time_Check -- 無進入時間 --> C4[標記：無進入時間];
+        Time_Check -- 無出場時間 --> C5[標記：無出場時間];
+        Time_Check -- 進出時間皆缺 --> C6[標記：進出時間皆缺];
+        Time_Check -- 進入時間 >= 出場時間 --> C7[標記：進入時間大於等於出場時間];
+        Time_Check -- 停留時間 > 7天 --> C8_LongStay[標記：停留時間超過7天];
+    end
+
+    subgraph 長時停留車輛細分
+        C8_LongStay --> D_CarType{車輛類型細分?};
+        D_CarType -- 臨停車 --> D4[分類：臨停車];
+        D_CarType -- 教職員工長時 --> D5[分類：教職員工長時];
+        D_CarType -- 教職員計次 --> D6[分類：教職員計次];
+        D_CarType -- 學生長時 --> D7[分類：學生長時];
+        D_CarType -- 學生計次 --> D8[分類：學生計次];
+    end
+
+    subgraph 清洗結果匯出
+        C1 --> end_proc([清洗完成資料匯出]);
+        C2 --> end_proc;
+        C3 --> end_proc;
+        C4 --> end_proc;
+        C5 --> end_proc;
+        C6 --> end_proc;
+        C7 --> end_proc;
+        D4 --> end_proc;
+        D5 --> end_proc;
+        D6 --> end_proc;
+        D7 --> end_proc;
+        D8 --> end_proc;
+        A2 --> end_proc;
+    end
+```
+
+
+
+
+
+
 
 
 
