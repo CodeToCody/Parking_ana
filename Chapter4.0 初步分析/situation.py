@@ -4,18 +4,21 @@ import os
 from tqdm import tqdm
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
+import numpy as np
 
+
+DATETIME_FORMAT = "%Y/%m/%d"
 magic_num = 0
 # 0 for notebook
 # 1 for desktop
 
 directory = os.getcwd()
-output_graph_file = os.path.join(directory,"Realtime_situation_chart/")
+output_graph_file = os.path.join(directory,"image/")
 
 if magic_num == 0:
-    source_path = r"C:/Cody/Research/clean_data/prepare.csv"
+    source_path = r"C:/Cody/Research/clean_data/raw_concat.csv"
 elif magic_num == 1:
-    source_path = r"D:/Research/clean_data/prepare.csv"
+    source_path = r"D:/Research/clean_data/raw_concat.csv"
 else:
     print("wrong magic num.")
     exit(1)
@@ -23,6 +26,13 @@ else:
 # Topic 資源使用率分析
 
 df = pd.read_csv(source_path)
+# 轉換時間欄位
+df["進入日"] = pd.to_datetime(df["進入日"], errors="coerce").dt.strftime(DATETIME_FORMAT)
+df["出場日"] = pd.to_datetime(df["出場日"], errors="coerce").dt.strftime(DATETIME_FORMAT)
+
+df.replace("nan", np.nan, inplace=True)
+df["全時間格式進入時間"] = pd.to_datetime(df["進入日"] + " " + df["進入時間"], format="%Y/%m/%d %H:%M:%S", errors="coerce")
+df["全時間格式出場時間"] = pd.to_datetime(df["出場日"] + " " + df["出場時間"], format="%Y/%m/%d %H:%M:%S", errors="coerce")
 
 # 將時間字串轉為 datetime
 df["in_time"] = pd.to_datetime(df["全時間格式進入時間"])

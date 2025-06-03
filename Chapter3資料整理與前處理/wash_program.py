@@ -6,7 +6,7 @@ from datetime import datetime
 
 # === 基本參數 ===
 DATETIME_FORMAT = "%Y/%m/%d"
-MAGIC_NUM = 1  # 0 for notebook, 1 for desktop
+MAGIC_NUM = 0  # 0 for notebook, 1 for desktop
 
 # === 路徑設定 ===
 BASE_DIR = os.getcwd()
@@ -162,4 +162,14 @@ if __name__ == "__main__":
     map_112 = load_ticket_mapping(os.path.join(BASE_DIR, "112_confirm.xls"))
     map_113 = load_ticket_mapping(os.path.join(BASE_DIR, "113_confirm.xls"))
     raw_data = load_input_data(input_file_path)
+
+     # 儲存原始資料（未經清理與校正）
+    try:
+        raw_output_file = output_file.replace("prepare.csv", "raw_concat.csv")
+        raw_data.to_csv(raw_output_file, index=False, encoding="utf-8-sig")
+        print(f"原始合併資料已儲存至 {raw_output_file}")
+    except Exception as e:
+        print(f"原始資料儲存失敗: {e}")
+
+
     clean_data(raw_data, map_112, map_113)
