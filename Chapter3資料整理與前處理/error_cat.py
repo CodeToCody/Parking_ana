@@ -5,7 +5,7 @@ from datetime import timedelta
 
 # === 基本參數與路徑設定 ===
 DATETIME_FORMAT = "%Y/%m/%d"
-MAGIC_NUM = 0  # 0 for notebook, 1 for desktop
+MAGIC_NUM = 1  # 0 for notebook, 1 for desktop
 INPUT_PATHS = {
     0: r"C:/Cody/Research/clean_data/dropped_records.csv",
     1: r"D:/Research/clean_data/dropped_records.csv"
@@ -14,6 +14,18 @@ OUTPUT_FILES = {
     0: r"C:/Cody/Research/Chapter3資料整理與前處理/Error_Analyze.xlsx",
     1: r"D:/Research/Chapter3資料整理與前處理/Error_Analyze.xlsx"
 }
+
+CLEAN_DATA_PATH = {
+    0: r"C:/Cody/Research/clean_data/prepare.csv",
+    1: r"D:/Research/clean_data/prepare.csv"
+}
+
+OUTPUT_FILES_dropped_stat = {
+    0: r"C:/Cody/Research/clean_data/daily_error_count.csv",
+    1: r"D:/Research/clean_data/daily_error_count.csv"
+}
+
+prepare_data = pd.read_csv(CLEAN_DATA_PATH[MAGIC_NUM])
 
 if MAGIC_NUM not in INPUT_PATHS:
     raise ValueError("Invalid MAGIC_NUM. Please set to 0 or 1.")
@@ -82,6 +94,8 @@ something_only_exit_na = ~something_entry_na & something_exit_na
 # === 票種分類統計分析 ===
 group_by_ticket = usable_data.groupby("票種")
 summary_list = []
+ticket_type_total_counts = usable_data["票種"].value_counts().to_dict()
+prepare_ticket_counts = prepare_data["票種"].value_counts().to_dict()
 
 for ticket_type, group in group_by_ticket:
     group = group.copy()
@@ -89,10 +103,15 @@ for ticket_type, group in group_by_ticket:
     group["全時間格式出場時間"] = pd.to_datetime(group["全時間格式出場時間"], errors="coerce")
     stay_time = group["全時間格式出場時間"] - group["全時間格式進入時間"]
 
+    group_total = len(group)
+    total_in_prepare = prepare_ticket_counts.get(ticket_type, 0)
+    usable_count = len(group)
+
     summary_list.append({
         "票種": ticket_type,
-        "總筆數": len(group),
-        "車號不可辨識": (~group["車號"].apply(is_identifiable_plate)).sum(),
+        "票種錯誤資料數": group_total,
+        "各票種正確總筆數": total_in_prepare,
+        "錯誤占比(%)": round(usable_count / total_in_prepare * 100, 2) if total_in_prepare else np.nan,
         "魔幻進出時間": (group["全時間格式進入時間"] > group["全時間格式出場時間"]).sum(),
         "停留 >7天": (stay_time > timedelta(days=7)).sum(),
         "缺進": group["全時間格式進入時間"].isna().sum(),
@@ -106,4 +125,12 @@ summary_df = pd.DataFrame(summary_list)
 with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
     summary_df.to_excel(writer, sheet_name="票種異常統計", index=False)
     ticket_stats.to_excel(writer, sheet_name="超過7天票種統計", index=False)
+
+# === 錯誤資料出場日期統計 ===
+usable_data["錯誤出場日"] = pd.to_datetime(usable_data["全時間格式出場時間"], errors="coerce").dt.date
+daily_error_count = usable_data["錯誤出場日"].value_counts().reset_index()
+daily_error_count.columns = ["date", "error_count"]
+
+# 輸出成 CSV
+daily_error_count.to_csv(OUTPUT_FILES_dropped_stat[MAGIC_NUM], index=False)
 

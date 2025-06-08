@@ -8,7 +8,7 @@ import seaborn as sns
 import numpy as np
 
 # 設定環境
-magic_num = 0
+magic_num = 1
 if magic_num == 0:
     source_path = r"C:/Cody/Research/clean_data/prepare.csv"
     output_graph_file = r"C:/Cody/Research/Chapter4資料探勘與趨勢分析/StayTimeSummary_chart/"
@@ -59,10 +59,12 @@ if len(df) == 0:
 # 定義直方圖的 bin（15 分鐘 = 0.25 小時）
 bin_width = 0.25
 short_start, short_end = 0.5, 1
-regular_start, regular_end = 6, 8
+regular_start, regular_end = 6, 10
 # 換算為 index
 short_start_idx = int(short_start / bin_width)
 short_end_idx = int(short_end / bin_width)
+
+
 regular_start_idx = int(regular_start / bin_width)
 regular_end_idx = int(regular_end / bin_width)
 
@@ -121,7 +123,7 @@ for month, hist in monthly_avg.items():
         # 標記關鍵區間 axvspan() 用法: axvspan(xmin,xmax,ymin=0,**kwargs)，x邊界和y的下邊界(上邊界用ymax)(xmin xmax沒寫會報錯)
         # 繪圖時使用這樣的範圍
         plt.axvspan(short_start_idx, short_end_idx, color="lime", alpha=0.2, label="短停 (0.5 – 1 小時)")
-        plt.axvspan(regular_start_idx, regular_end_idx, color="purple", alpha=0.2, label="常規停留 (6 – 8 小時)")
+        plt.axvspan(regular_start_idx, regular_end_idx, color="purple", alpha=0.2, label="常規停留 (6 – 10 小時)")
         plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # 圖例外部右側
 
         # 設置 x 軸刻度（每 15 分鐘刻度，每 0.5 小時標籤）
