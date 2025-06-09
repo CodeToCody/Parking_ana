@@ -8,7 +8,7 @@ import seaborn as sns
 import numpy as np
 
 # 設定環境
-magic_num = 1
+magic_num = 0
 if magic_num == 0:
     source_path = r"C:/Cody/Research/clean_data/prepare.csv"
     output_graph_file = r"C:/Cody/Research/Chapter4資料探勘與趨勢分析/StayTimeSummary_chart/"
@@ -122,7 +122,7 @@ for month, hist in monthly_avg.items():
 
         # 標記關鍵區間 axvspan() 用法: axvspan(xmin,xmax,ymin=0,**kwargs)，x邊界和y的下邊界(上邊界用ymax)(xmin xmax沒寫會報錯)
         # 繪圖時使用這樣的範圍
-        plt.axvspan(short_start_idx, short_end_idx, color="lime", alpha=0.2, label="短停 (0.5 – 1 小時)")
+        plt.axvspan(short_start_idx, short_end_idx, color="lime", alpha=0.2, label="短時間停留 (0.5 – 1 小時)")
         plt.axvspan(regular_start_idx, regular_end_idx, color="purple", alpha=0.2, label="常規停留 (6 – 10 小時)")
         plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))  # 圖例外部右側
 

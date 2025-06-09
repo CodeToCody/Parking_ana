@@ -6,7 +6,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 # 常數設定
-MAGIC_NUM = 1
+MAGIC_NUM = 0
 PARKING_CAPACITY = 1475
 PEAK_HOUR_START = 9
 PEAK_HOUR_END = 16
