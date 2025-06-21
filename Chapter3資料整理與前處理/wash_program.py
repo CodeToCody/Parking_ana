@@ -6,7 +6,7 @@ from datetime import datetime
 
 # === 基本參數 ===
 DATETIME_FORMAT = "%Y/%m/%d"
-MAGIC_NUM = 0  # 0 for notebook, 1 for desktop
+MAGIC_NUM = 1  # 0 for notebook, 1 for desktop
 
 # === 路徑設定 ===
 BASE_DIR = os.getcwd()
