@@ -5,7 +5,7 @@ from datetime import timedelta
 
 # === 基本參數與路徑設定 ===
 DATETIME_FORMAT = "%Y/%m/%d"
-MAGIC_NUM = 0  # 0 for notebook, 1 for desktop
+MAGIC_NUM = 1  # 0 for notebook, 1 for desktop
 INPUT_PATHS = {
     0: r"C:/Cody/Research/clean_data/dropped_records.csv",
     1: r"D:/Research/clean_data/dropped_records.csv"

@@ -6,7 +6,7 @@ import seaborn as sns
 import numpy as np
 
 # 設定環境
-magic_num = 0
+magic_num = 1
 if magic_num == 0:
     source_path1 = r"C:/Cody/Research/clean_data/prepare.csv"
     source_path2 = r"C:/Cody/Research/clean_data/prepare2.csv"

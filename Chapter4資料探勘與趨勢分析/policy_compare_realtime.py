@@ -14,7 +14,7 @@ PARKING_CAPACITY = 1475
 # --------------------------------------------------------
 # 檔案路徑
 # --------------------------------------------------------
-magic_num = 0
+magic_num = 1
 if magic_num == 0:
     source_path1 = Path(r"C:/Cody/Research/clean_data/prepare.csv")
     source_path2 = Path(r"C:/Cody/Research/clean_data/prepare2.csv")
